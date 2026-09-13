@@ -104,6 +104,12 @@
 
     <button class="primary" type="button" id="save-button">儲存 Lucas Lu 到聯絡人</button>
     <p class="footnote" id="save-footnote" role="status" aria-live="polite">手機會先開啟分享選單；請選擇「聯絡人」。若沒有此選項，可先「儲存到檔案」再開啟 VCF。</p>
+    <div class="save-result" id="save-result" hidden role="status" aria-live="polite">
+      <p class="save-result-title" id="save-result-title">已下載 Lucas-Lu.vcf</p>
+      <p class="save-result-body" id="save-result-body">檔案已存到手機的「下載」資料夾。點下方按鈕開啟它，手機就會問你要不要加入聯絡人。</p>
+      <a class="save-result-action" id="save-result-action" href="#">開啟檔案並加入聯絡人</a>
+    </div>
+
     <a class="manual-fallback" id="manual-fallback" hidden download="Lucas-Lu.vcf">長按這裡另存聯絡人檔案</a>
   </section>
 

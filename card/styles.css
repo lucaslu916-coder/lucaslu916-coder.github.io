@@ -152,3 +152,39 @@ button:disabled { cursor: wait; opacity: .6; }
   font-weight: 800;
   text-decoration: none;
 }
+
+/* ── 下載完成後的明確回饋 ──
+   Android 下載不一定有明顯的系統提示，使用者很容易以為失敗。 */
+.save-result {
+  margin: 18px 0 0;
+  padding: 18px 18px 16px;
+  border: 1px solid #b7e4c7;
+  border-radius: 16px;
+  background: linear-gradient(150deg, #f2fff6, #e7f9ee);
+  text-align: center;
+}
+.save-result-title {
+  margin: 0;
+  color: #0a7a3d;
+  font-size: 16px;
+  font-weight: 900;
+}
+.save-result-title::before { content: "✓ "; }
+.save-result-body {
+  margin: 8px 0 14px;
+  color: #3f6b52;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.save-result-action {
+  display: block;
+  padding: 13px 16px;
+  color: white;
+  border-radius: 12px;
+  background: #06a944;
+  font-size: 15px;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 8px 18px rgba(6, 169, 68, .2);
+}
+.save-result-action:active { transform: translateY(1px); }

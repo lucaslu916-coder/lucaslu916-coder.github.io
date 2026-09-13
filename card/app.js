@@ -31,6 +31,9 @@ const UI = {
     footIosInApp: "此 App 內建瀏覽器不支援分享聯絡人檔案。請點右下角的指南針圖示，以 Safari 開啟本頁後再試一次。",
     footError: "無法自動開啟聯絡人。請長按下方連結另存檔案，再點開它加入通訊錄。",
     manual: "長按這裡另存聯絡人檔案",
+    resultTitle: "已下載 Lucas-Lu.vcf",
+    resultBody: "檔案已存到手機的「下載」資料夾。點下方按鈕開啟它，手機就會問你要不要加入聯絡人。",
+    resultAction: "開啟檔案並加入聯絡人",
     shareTitle: "呂建興 Lucas Lu 聯絡人名片",
   },
   en: {
@@ -58,6 +61,9 @@ const UI = {
     footIosInApp: "This in-app browser cannot share contact files. Tap the compass icon at the bottom right to open this page in Safari, then try again.",
     footError: "Could not open the contact automatically. Long-press the link below to save the file, then open it.",
     manual: "Long-press here to save the contact file",
+    resultTitle: "Lucas-Lu.vcf downloaded",
+    resultBody: "The file is in your Downloads folder. Open it below and your phone will offer to add the contact.",
+    resultAction: "Open the file to add the contact",
     shareTitle: "Contact card for Lucas Lu",
   },
   ja: {
@@ -85,6 +91,9 @@ const UI = {
     footIosInApp: "このアプリ内ブラウザは連絡先ファイルを共有できません。右下のコンパスアイコンから Safari で開いて、もう一度お試しください。",
     footError: "連絡先を自動で開けませんでした。下のリンクを長押しして保存し、開いてください。",
     manual: "長押しして連絡先ファイルを保存",
+    resultTitle: "Lucas-Lu.vcf をダウンロードしました",
+    resultBody: "ファイルは「ダウンロード」フォルダに保存されました。下のボタンから開くと、連絡先に追加するかどうかの確認画面が表示されます。",
+    resultAction: "ファイルを開いて連絡先に追加",
     shareTitle: "Lucas Lu（呂建興）の連絡先カード",
   },
 };
@@ -171,6 +180,9 @@ function render() {
   $("location-button").textContent = location_ ? t.locationUpdate : t.locationAdd;
   $("save-button").textContent = t.saveButton;
   $("manual-fallback").textContent = t.manual;
+  $("save-result-title").textContent = t.resultTitle;
+  $("save-result-body").textContent = t.resultBody;
+  $("save-result-action").textContent = t.resultAction;
 
   document.querySelectorAll("#lang-group button").forEach((b) => {
     const on = b.dataset.lang === language;
@@ -216,12 +228,28 @@ function setFootnote(kind) {
   else { el.textContent = t.footDefault; }
 }
 
+// Android 的下載提示常常很不顯眼，使用者會誤以為什麼都沒發生。
+// 頁面自己給一張看得見的成功卡片，並捲進視野。
+function showDownloadResult(blobUrl) {
+  const panel = $("save-result");
+  $("save-result-action").href = blobUrl;
+  panel.hidden = false;
+  $("save-footnote").hidden = true; // 卡片已經說清楚了，別再重複一次
+  panel.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function hideDownloadResult() {
+  $("save-result").hidden = true;
+  $("save-footnote").hidden = false;
+}
+
 async function saveContact() {
   const t = UI[language];
   const button = $("save-button");
   button.disabled = true;
   button.textContent = t.saveOpening;
   $("manual-fallback").hidden = true;
+  hideDownloadResult();
 
   try {
     const vcard = buildVCard({
@@ -269,6 +297,7 @@ async function saveContact() {
           anchor.click();
           anchor.remove();
           setFootnote("downloaded");
+          showDownloadResult(lastBlobUrl);
           if (degraded) $("manual-fallback").hidden = false; // 前面失敗過，多留一條路
           return;
         } catch {
@@ -296,6 +325,7 @@ document.querySelectorAll("#lang-group button").forEach((b) => {
     render();
     setFootnote("default");
     $("manual-fallback").hidden = true;
+    hideDownloadResult();
   });
 });
 $("location-button").addEventListener("click", requestLocation);
