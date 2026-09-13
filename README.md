@@ -48,6 +48,13 @@ commit 後 GitHub Pages 會自動重新發布，約 1 分鐘生效。
 `TARGET` 改成 `https://lucaslu916-coder.github.io/card/` 即可切換，
 **NFC 標籤與已印出的 QR Code 完全不需要變動**。
 
+## 授權
+
+**著作權所有，保留一切權利。** 見 [`LICENSE`](LICENSE)。
+
+本儲存庫公開僅因 GitHub Pages 免費方案的技術要求，**不構成任何授權**。
+ITRI 標誌為工業技術研究院商標，不在本著作權利範圍內。
+
 ## 相關文件
 
 完整專案脈絡、NFC 寫入指南與發布檢查清單，見 Notion

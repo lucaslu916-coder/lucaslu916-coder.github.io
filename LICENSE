@@ -1,0 +1,81 @@
+著作權所有，保留一切權利
+Copyright (c) 2026 呂建興 Lucas Lu. All Rights Reserved.
+
+================================================================
+一、權利歸屬
+================================================================
+
+本儲存庫中的原始碼、樣式、文件、設定與版面設計（以下合稱「本著作」），
+係由呂建興（Lucas Lu）以個人時間、個人設備與個人付費之軟體訂閱獨立完成，
+著作權歸呂建興所有。
+
+本著作為個人電子名片，其內容包含著作人之姓名、肖像、聯絡方式等個人資料，
+性質上屬個人品牌資產。
+
+================================================================
+二、授權範圍
+================================================================
+
+本著作「未」以任何形式授權。
+
+未經著作權人事前書面同意，任何個人、法人、機關或組織，不得為下列行為：
+
+  1. 重製、散布、公開傳輸本著作之全部或一部
+  2. 修改、改作本著作，或以本著作為基礎製作衍生著作
+  3. 將本著作部署於任何個人、組織或商業用途之服務
+  4. 將本著作納入任何內部系統、範本庫、教育訓練教材或服務目錄
+
+本儲存庫設為公開（public），僅因 GitHub Pages 免費方案之技術要求所致，
+「不」構成任何明示或默示之授權，亦不構成對公眾之權利拋棄。
+
+================================================================
+三、第三方權利聲明
+================================================================
+
+本儲存庫包含下列非屬著作權人所有之素材，不在第二條所述權利範圍內，
+其權利各歸原權利人所有：
+
+  * `card/itri-logo.png`
+    工業技術研究院（ITRI）之標誌與名稱，為該院之商標。
+    於本著作中僅用於識別著作人之服務單位，屬指示性合理使用。
+    著作權人對此標誌不主張任何權利，亦無權授權他人使用。
+    任何第三方欲使用該標誌，應逕洽工業技術研究院取得授權。
+
+  * `card/lucas-lu.png`
+    著作人之個人肖像。肖像權專屬著作人，不隨任何授權移轉。
+
+  * `card/line-qr.jpg`
+    著作人之 LINE 個人帳號 QR Code。
+
+================================================================
+四、洽詢授權
+================================================================
+
+如需使用本著作，請聯繫著作權人洽談授權條件：
+
+  呂建興 Lucas Lu
+  LucasLu@itri.org.tw
+
+================================================================
+ENGLISH SUMMARY
+================================================================
+
+All Rights Reserved. This work is the personal property of Lucas Lu
+(呂建興), created on personal time, on personal equipment, using a
+personally funded software subscription.
+
+NO LICENSE IS GRANTED. You may not copy, modify, redistribute, deploy,
+or incorporate this work — in whole or in part — into any personal,
+organizational, or commercial use without prior written permission.
+
+This repository is public solely because GitHub Pages requires it on the
+free tier. Public visibility does not grant any rights, express or
+implied, and does not place this work in the public domain.
+
+THIRD-PARTY MATERIALS: The ITRI logo and name (`card/itri-logo.png`) are
+trademarks of the Industrial Technology Research Institute, used here for
+identification only. The copyright holder claims no rights to them and
+cannot license them to anyone. The portrait and LINE QR code are personal
+to the author and transfer under no licence.
+
+Permission enquiries: LucasLu@itri.org.tw
