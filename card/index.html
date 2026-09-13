@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>呂建興 Lucas Lu｜儲存電子名片</title>
+<meta name="description" content="儲存 Lucas Lu 的聯絡資訊，並在手機本機記錄相識時間、場合與地點。">
+<meta property="og:title" content="呂建興 Lucas Lu｜工研院產科國際所">
+<meta property="og:description" content="儲存 Lucas Lu 的聯絡資訊，並在手機本機記錄相識時間、場合與地點。">
+<meta property="og:image" content="og.png">
+<meta property="og:type" content="profile">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<!-- 中文版內容直接寫在 HTML 裡：JS 失效時名片仍然完整可讀、可撥號、可寄信。 -->
+</head>
+<body>
+<main id="card" lang="zh-Hant" style="--blue:#0a85b8;--blue-dark:#075a91;--teal:#06a89d">
+
+  <section class="profile" aria-labelledby="profile-name">
+    <div class="brand-row">
+      <div class="itri-logo-frame">
+        <img class="itri-logo" src="itri-logo.png" alt="工業技術研究院 Industrial Technology Research Institute" width="1200" height="388">
+      </div>
+      <div class="brand-actions">
+        <span class="digital-label">Digital Business Card</span>
+        <div class="language-switch" role="group" id="lang-group" aria-label="語言切換">
+          <button type="button" data-lang="zh" class="active" aria-pressed="true">中文</button>
+          <button type="button" data-lang="en" aria-pressed="false">English</button>
+          <button type="button" data-lang="ja" aria-pressed="false">日本語</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="eyebrow">Industrial Technology Research Institute</p>
+
+    <div class="identity">
+      <img class="portrait" id="portrait" src="lucas-lu.png" alt="呂建興 Lucas Lu 個人照片" width="404" height="404">
+      <div class="identity-copy">
+        <h1 id="profile-name"><span id="name-main">呂建興</span> <span id="name-sub">Lucas Lu</span></h1>
+        <p class="role" id="role">資深研究員 · Senior Researcher</p>
+        <p class="domain" id="domain">高科技設備領域</p>
+        <p class="org" id="org">工業技術研究院<br>產業科技國際策略發展所</p>
+      </div>
+    </div>
+
+    <address class="contact-details" id="contact-details" aria-label="聯絡方式">
+      <div><span data-t="phoneLabel">電話</span><a href="tel:+88635917718">03 591 7718</a></div>
+      <div><span>Email</span><a href="mailto:LucasLu@itri.org.tw">LucasLu@itri.org.tw</a></div>
+      <div><span data-t="websiteLabel">網站</span><a href="https://www.itri.org.tw/" target="_blank" rel="noreferrer">www.itri.org.tw</a></div>
+      <div><span data-t="researchLabel">產業研究</span><a href="https://ieknet.iek.org.tw/" target="_blank" rel="noreferrer" id="research-link">IEK 產業情報網</a></div>
+    </address>
+  </section>
+
+  <section class="expertise" aria-labelledby="expertise-title">
+    <p class="step">ABOUT</p>
+    <h2 id="expertise-title">設備產業研究與 AI 導入輔導</h2>
+    <p class="bio" id="bio">專注於半導體設備產業與供應鏈研究，具備晶圓製程、設備開發、先進封裝檢測及高科技製造系統分析經驗。</p>
+    <p class="bio ai-advisory" id="advisory">同時參與產業競爭力輔導團，協助設備與製造業者進行 AI 成熟度盤點、流程痛點診斷、可驗證 PoC 規劃，並銜接人才、工具與政策資源。</p>
+    <ul class="expertise-list" id="expertise-list" aria-label="核心專長">
+      <li>半導體設備產業分析</li>
+      <li>晶圓製程與設備開發</li>
+      <li>化合物半導體技術研究</li>
+      <li>設備業 AI 導入診斷與輔導</li>
+    </ul>
+  </section>
+
+  <section class="line-connect" aria-labelledby="line-title">
+    <div class="line-copy">
+      <p class="line-kicker">LINE</p>
+      <h2 id="line-title">加入 Lucas Lu 為好友</h2>
+      <p id="line-desc">點擊按鈕直接開啟 LINE，或使用另一支手機掃描 QR Code。</p>
+      <a class="line-button" id="line-button" href="https://line.me/ti/p/4d4tXQMUUY" target="_blank" rel="noreferrer">開啟 LINE 加好友</a>
+    </div>
+    <a class="line-qr" id="line-qr-link" href="https://line.me/ti/p/4d4tXQMUUY" target="_blank" rel="noreferrer" aria-label="開啟 LINE 加入 Lucas Lu 為好友">
+      <img src="line-qr.jpg" alt="Lucas Lu 的 LINE 好友 QR Code" width="900" height="900">
+    </a>
+  </section>
+
+  <section class="memory" aria-labelledby="memory-title">
+    <div class="section-heading">
+      <p class="step" id="save-step">儲存名片</p>
+      <h2 id="memory-title">留下這次相識的線索</h2>
+      <p id="memory-intro">以下資料只用於即時產生聯絡人檔案，不建立資料庫紀錄，也不會提供給 Lucas Lu。</p>
+    </div>
+
+    <label>
+      <span id="occasion-label">相識場合 <small id="occasion-optional">選填</small></span>
+      <input id="occasion" maxlength="80" placeholder="例如：先進製造技術論壇">
+    </label>
+
+    <label>
+      <span id="note-label">交流備註 <small id="note-optional">選填</small></span>
+      <textarea id="note" maxlength="180" rows="3" placeholder="例如：討論智慧製造與產業合作"></textarea>
+    </label>
+
+    <div class="location-card">
+      <div>
+        <strong id="location-title">相識地點</strong>
+        <p id="location-status">選填，只用於即時產生 VCF，不建立資料庫紀錄</p>
+      </div>
+      <button class="secondary" type="button" id="location-button">加入目前位置</button>
+    </div>
+
+    <button class="primary" type="button" id="save-button">儲存 Lucas Lu 到聯絡人</button>
+    <p class="footnote" id="save-footnote" role="status" aria-live="polite">手機會先開啟分享選單；請選擇「聯絡人」。若沒有此選項，可先「儲存到檔案」再開啟 VCF。</p>
+    <a class="manual-fallback" id="manual-fallback" hidden download="Lucas-Lu.vcf">長按這裡另存聯絡人檔案</a>
+  </section>
+
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>

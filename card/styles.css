@@ -1,0 +1,154 @@
+/* 自 v1.2.1 app/globals.css 移植。原檔 @import "tailwindcss" 只提供 reset，
+   此處以下方最小 reset 取代，樣式本身完全自足、不需建置工具。 */
+*, *::before, *::after { box-sizing: border-box; }
+h1, h2, h3, p, ul, figure { margin: 0; }
+ul { padding: 0; list-style: none; }
+img { max-width: 100%; }
+a { color: inherit; }
+[hidden] { display: none !important; }
+
+
+:root {
+  --ink: #10233d;
+  --muted: #5e7088;
+  --blue: #0a85b8;
+  --blue-dark: #075a91;
+  --teal: #06a89d;
+  --pale: #e8f7f8;
+  --line: #d3e7ea;
+}
+
+* { box-sizing: border-box; }
+html { background: #eef4f7; }
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: Arial, "Noto Sans TC", sans-serif;
+  background: radial-gradient(circle at 15% 0%, rgba(10, 133, 184, .14), transparent 34rem), #eef4f7;
+}
+button, input, textarea { font: inherit; }
+main {
+  width: min(100%, 560px);
+  min-height: 100vh;
+  margin: 0 auto;
+  background: white;
+  box-shadow: 0 0 60px rgba(16, 35, 61, .1);
+}
+.profile {
+  position: relative;
+  overflow: hidden;
+  padding: 32px 26px 34px;
+  color: white;
+  background: linear-gradient(145deg, #075a91 0%, #078bb0 62%, #06a89d 100%);
+}
+.profile::after {
+  content: "";
+  position: absolute;
+  width: 230px;
+  height: 230px;
+  right: -126px;
+  top: -75px;
+  border: 30px solid rgba(255,255,255,.12);
+  border-radius: 50%;
+}
+.brand-row { display: flex; align-items: center; justify-content: space-between; gap: 18px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+.brand-actions { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.itri-logo-frame { width: min(206px, 62vw); padding: 8px 10px; border: 1px solid rgba(255,255,255,.56); border-radius: 11px; background: rgba(255,255,255,.96); box-shadow: 0 7px 20px rgba(0,35,65,.15); }
+.itri-logo { display: block; width: 100%; height: auto; object-fit: contain; }
+.digital-label { max-width: 110px; text-align: right; line-height: 1.5; opacity: .76; }
+.language-switch { display: inline-flex; padding: 3px; border: 1px solid rgba(255,255,255,.42); border-radius: 999px; background: rgba(1, 48, 77, .2); box-shadow: 0 5px 15px rgba(0,35,65,.12); }
+.language-switch button { min-width: 54px; padding: 7px 10px; color: rgba(255,255,255,.76); border-radius: 999px; background: transparent; font-size: 11px; letter-spacing: 0; text-transform: none; transition: color .2s, background .2s, box-shadow .2s; }
+.language-switch button.active { color: var(--blue-dark); background: white; box-shadow: 0 2px 8px rgba(0,35,65,.18); }
+.language-switch button:focus-visible { outline: 3px solid rgba(255,255,255,.55); outline-offset: 2px; }
+.eyebrow { margin: 38px 0 14px; font-size: 11px; letter-spacing: .08em; opacity: .78; }
+.identity { display: grid; grid-template-columns: 116px minmax(0, 1fr); gap: 20px; align-items: center; }
+.portrait { display: block; width: 116px; height: 116px; object-fit: cover; border: 3px solid rgba(255,255,255,.72); border-radius: 50%; background: #eef3f6; box-shadow: 0 10px 28px rgba(0,35,65,.24); }
+.identity-copy { min-width: 0; }
+h1 { margin: 0; font-size: clamp(36px, 10vw, 51px); letter-spacing: -.05em; line-height: 1.05; }
+h1 span { display: block; margin-top: 7px; font-size: .55em; font-weight: 500; letter-spacing: -.02em; }
+.role { margin: 18px 0 4px; font-size: 17px; font-weight: 700; }
+.domain { margin: 5px 0 7px; color: #d9fffa; font-size: 13px; font-weight: 700; letter-spacing: .03em; }
+.org { margin: 0; font-size: 14px; line-height: 1.7; opacity: .83; }
+.contact-details { display: grid; gap: 11px; margin-top: 27px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.22); font-style: normal; }
+.contact-details div { display: grid; grid-template-columns: 68px minmax(0, 1fr); align-items: baseline; gap: 10px; }
+.contact-details span { font-size: 12px; font-weight: 700; letter-spacing: .08em; opacity: .7; }
+.contact-details a { width: fit-content; max-width: 100%; color: white; font-size: 15px; font-weight: 700; line-height: 1.45; overflow-wrap: anywhere; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.contact-details a:hover { text-decoration-thickness: 2px; }
+.expertise { margin: 22px 24px 0; padding: 23px 20px 21px; border: 1px solid var(--line); border-radius: 18px; background: #fbfdff; }
+.expertise h2 { font-size: 23px; }
+.bio { margin: 12px 0 17px; color: var(--muted); font-size: 14px; line-height: 1.75; }
+.bio.ai-advisory { margin-top: -3px; padding: 13px 14px; color: #174b6c; border-left: 3px solid var(--teal); border-radius: 0 10px 10px 0; background: var(--pale); }
+.expertise-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.expertise-list li { padding: 8px 10px; color: var(--blue-dark); border: 1px solid #cfe3ef; border-radius: 999px; background: var(--pale); font-size: 12px; font-weight: 700; }
+.line-connect { display: grid; grid-template-columns: 1fr 142px; gap: 20px; align-items: center; margin: 22px 24px 0; padding: 20px; border: 1px solid #cfead7; border-radius: 18px; background: linear-gradient(145deg, #f5fff8, #ebf9ef); }
+.line-kicker { margin: 0 0 6px; color: #06a944; font-size: 12px; font-weight: 900; letter-spacing: .16em; }
+.line-copy h2 { font-size: 21px; }
+.line-copy > p:not(.line-kicker) { margin: 8px 0 14px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.line-button { display: inline-block; padding: 11px 14px; color: white; border-radius: 11px; background: #06c755; text-decoration: none; font-size: 14px; font-weight: 800; box-shadow: 0 8px 18px rgba(6, 199, 85, .18); }
+.line-qr { display: block; padding: 6px; border-radius: 14px; background: white; box-shadow: 0 6px 18px rgba(16, 35, 61, .09); }
+.line-qr img { display: block; width: 100%; height: auto; border-radius: 9px; }
+.memory { padding: 30px 24px 38px; }
+.section-heading { margin-bottom: 24px; }
+.step { margin: 0 0 7px; color: var(--blue); font-size: 12px; font-weight: 800; letter-spacing: .16em; }
+h2 { margin: 0; font-size: 25px; letter-spacing: -.035em; }
+.section-heading > p:last-child { margin: 9px 0 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
+label { display: block; margin-top: 17px; }
+label > span, .location-card strong { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 800; }
+small { color: #8292a5; font-weight: 400; }
+input, textarea { width: 100%; padding: 14px 15px; color: var(--ink); border: 1px solid var(--line); border-radius: 12px; outline: none; background: #fbfdfe; transition: border-color .2s, box-shadow .2s; }
+textarea { resize: vertical; }
+input:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,111,186,.12); }
+.location-card { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 18px; padding: 15px; border: 1px solid var(--line); border-radius: 14px; background: var(--pale); }
+.location-card strong { margin-bottom: 4px; }
+.location-card p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+button { cursor: pointer; border: 0; font-weight: 800; }
+button:disabled { cursor: wait; opacity: .6; }
+.secondary { flex: 0 0 auto; padding: 10px 12px; color: var(--blue-dark); border: 1px solid rgba(0,111,186,.2); border-radius: 10px; background: white; font-size: 13px; }
+.primary { width: 100%; margin-top: 24px; padding: 16px; color: white; border-radius: 14px; background: linear-gradient(100deg, var(--blue-dark), var(--blue), var(--teal)); box-shadow: 0 10px 24px rgba(10, 133, 184, .22); }
+.primary:disabled { cursor: wait; opacity: .78; }
+.primary:active, .contact-details a:active, .secondary:active { transform: translateY(1px); }
+.footnote.error { color: #a32626; font-weight: 700; }
+.footnote.warning { color: #8a4b08; font-weight: 700; }
+.footnote { margin: 12px 8px 0; color: var(--muted); text-align: center; font-size: 12px; line-height: 1.5; }
+@media (min-width: 700px) {
+  body { padding: 36px 0; }
+  main { min-height: auto; border-radius: 24px; overflow: hidden; }
+}
+@media (max-width: 420px) {
+  .digital-label { display: none; }
+  .brand-row { align-items: flex-start; gap: 10px; }
+  .itri-logo-frame { width: min(190px, 56vw); }
+  .brand-actions { padding-top: 4px; }
+  .language-switch button { min-width: 48px; padding: 7px 8px; }
+  .identity { grid-template-columns: 92px minmax(0, 1fr); gap: 16px; }
+  .portrait { width: 92px; height: 92px; }
+  .identity h1 { font-size: 34px; }
+  .role { margin-top: 13px; font-size: 15px; }
+  .line-connect { grid-template-columns: 1fr 112px; gap: 14px; padding: 16px; }
+  .line-copy h2 { font-size: 19px; }
+  .line-button { padding: 10px 11px; font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; transition: none !important; }
+}
+
+/* ── 三語切換：多一顆按鈕，窄螢幕要能塞得下 ── */
+.language-switch button { min-width: 0; padding: 7px 11px; white-space: nowrap; }
+@media (max-width: 420px) {
+  .language-switch button { padding: 6px 8px; font-size: 10px; }
+}
+
+/* ── 儲存失敗時才出現的手動備援連結 ── */
+.manual-fallback {
+  display: block;
+  margin: 10px 8px 0;
+  padding: 12px;
+  border: 1px dashed var(--blue);
+  border-radius: 12px;
+  background: var(--pale);
+  color: var(--blue-dark);
+  text-align: center;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}

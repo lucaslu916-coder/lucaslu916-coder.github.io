@@ -41,6 +41,13 @@ commit 後 GitHub Pages 會自動重新發布，約 1 分鐘生效。
 網址的 query string 與 hash 會一併帶到目標站，所以日後可以做來源追蹤
 （例如 NFC 寫 `?src=nfc`、紙本 QR 寫 `?src=card`，就能分辨掃描來源）。
 
+## 名片頁本體
+
+`card/` 目錄放的是名片頁本身（純靜態，中英日三語）。
+目前轉址仍指向 ChatGPT Sites 的舊版；新版驗證完成後，把 `index.html` 的
+`TARGET` 改成 `https://lucaslu916-coder.github.io/card/` 即可切換，
+**NFC 標籤與已印出的 QR Code 完全不需要變動**。
+
 ## 相關文件
 
 完整專案脈絡、NFC 寫入指南與發布檢查清單，見 Notion
