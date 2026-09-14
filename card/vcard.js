@@ -44,6 +44,8 @@ const NOTE_LABELS = {
 
 const LOCALES = { zh: "zh-TW", en: "en-US", ja: "ja-JP" };
 
+// includeMemory=false 產生「純聯絡人」版本：不含相識時間／場合／位置。
+// 靜態 .vcf 檔用它——那個檔是預先產生的，塞不進即時資訊。
 export const buildVCard = ({
   language = "zh",
   timestamp,
@@ -51,6 +53,7 @@ export const buildVCard = ({
   note = "",
   latitude = null,
   longitude = null,
+  includeMemory = true,
 }) => {
   const lang = NOTE_LABELS[language] ? language : "zh";
   const labels = NOTE_LABELS[lang];
@@ -63,7 +66,7 @@ export const buildVCard = ({
   const hasLocation = latitude !== null && latitude !== undefined
     && longitude !== null && longitude !== undefined;
 
-  const memory = [
+  const memory = !includeMemory ? "" : [
     `${labels.time}：${formattedMoment}`,
     occasion.trim() ? `${labels.occasion}：${occasion.trim()}` : "",
     hasLocation ? `${labels.place}：${latitude.toFixed(6)}, ${longitude.toFixed(6)}` : "",
@@ -88,7 +91,7 @@ export const buildVCard = ({
     `ADR;TYPE=WORK;CHARSET=UTF-8:${card.vcard.address.map(escapeText).join(";")}`,
     `URL:${card.person.website.url}`,
     `X-SOCIALPROFILE;TYPE=LINE:${card.person.line.url}`,
-    `NOTE;CHARSET=UTF-8:${escapeText(memory)}`,
+    ...(memory ? [`NOTE;CHARSET=UTF-8:${escapeText(memory)}`] : []),
     `REV:${timestamp.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "")}`,
     "END:VCARD",
   ];

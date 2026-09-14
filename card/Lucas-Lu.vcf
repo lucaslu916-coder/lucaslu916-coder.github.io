@@ -1,0 +1,16 @@
+BEGIN:VCARD
+VERSION:3.0
+PRODID:-//Lucas Lu//Digital Business Card//ZH-TW
+N;CHARSET=UTF-8:呂;建興;;;
+FN;CHARSET=UTF-8:呂建興 Lucas Lu
+ORG;CHARSET=UTF-8:工業技術研究院;產業科技國際策略發展所;
+ 機械與製造系統研究部;機械與系統研究組
+TITLE;CHARSET=UTF-8:資深研究員 / Senior Researcher
+TEL;TYPE=WORK,VOICE:+886-3-591-7718
+EMAIL;TYPE=INTERNET,WORK:LucasLu@itri.org.tw
+ADR;TYPE=WORK;CHARSET=UTF-8:;;中興路四段195號10館2樓208室;竹東
+ 鎮;新竹縣;310401;台灣
+URL:https://www.itri.org.tw/
+X-SOCIALPROFILE;TYPE=LINE:https://line.me/ti/p/4d4tXQMUUY
+REV:20260914T000000Z
+END:VCARD
