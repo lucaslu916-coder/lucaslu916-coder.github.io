@@ -45,6 +45,40 @@ window.location.assign(`/Lucas-Lu.vcf?...`);             // 手機永遠到不�
 
 使用者在分享選單自己按取消（`AbortError`）不算失敗，不會誤報錯誤。
 
+## 儲存聯絡人怎麼分流
+
+按下按鈕後，`save-strategy.js` 依「裝置」與「有沒有填相識資訊」決定順序：
+
+| 情況 | 順序 |
+|---|---|
+| **iOS Safari・沒填相識資訊** | **導航到靜態 `Lucas-Lu.vcf` → 直接跳出聯絡人卡片** → 分享 → 手動連結 |
+| iOS Safari・有填 | 分享（才帶得到時間／場合／GPS） → 手動連結 |
+| iOS App 內建瀏覽器 | 內建瀏覽器指引 → 手動連結 |
+| Android／桌面 | 分享 → 下載 → 手動連結 |
+
+這些順序不是推論出來的，是 2026-09-14 用 iPhone 與 Android 實機逐項測出來的：
+
+- iOS 導航到同網域 `.vcf`，Safari 直接顯示聯絡人卡片，比分享選單少一步
+- **Android 三種導航方式一律變成下載，`intent://` 完全沒反應**——
+  平台沒有開放讓網頁直接開啟新增聯絡人的介面，只能走下載，這點無法改善
+- iOS App 內建瀏覽器連導航都會失敗，所以用 `canShare` 判斷是否為 Safari
+
+## 更新聯絡資料後要重新產生靜態 .vcf
+
+`Lucas-Lu.vcf` 是預先產生的檔案，**不會自動跟著 `config.js` 變**。
+改了姓名、電話、Email、地址之後執行：
+
+```bash
+node --input-type=module -e "
+import {buildVCard} from './card/vcard.js';
+import {writeFileSync} from 'node:fs';
+writeFileSync('card/Lucas-Lu.vcf', buildVCard({
+  language:'zh', timestamp:new Date(), includeMemory:false }));
+"
+```
+
+忘記重新產生時 `npm test` 會失敗並提示——不會默默送出過期的聯絡資料。
+
 ## 已知限制：複姓
 
 `vcard.js` 以「中文姓名第一個字為姓」拆分 vCard 的 `N` 欄位。

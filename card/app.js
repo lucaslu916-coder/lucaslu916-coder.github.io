@@ -99,6 +99,9 @@ const UI = {
 };
 
 const $ = (id) => document.getElementById(id);
+
+// 預先產生的純聯絡人 vCard（不含相識紀錄）。由 npm test 確保它與 config.js 同步。
+const STATIC_VCARD = "Lucas-Lu.vcf";
 const isIOS = () =>
   /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
   (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -270,10 +273,21 @@ async function saveContact() {
     let canShareFiles = false;
     try { canShareFiles = navigator.canShare?.({ files: [file] }) === true; } catch { /* 舊瀏覽器會直接丟例外 */ }
 
-    const plan = deliveryPlan({ canShareFiles, isIOS: isIOS() });
+    // 有填相識資訊就不能走靜態檔——那個檔是預先產生的，塞不進即時內容
+    const hasMemoryFields = Boolean(
+      $("occasion").value.trim() || $("note").value.trim() || location_,
+    );
+    const plan = deliveryPlan({ canShareFiles, isIOS: isIOS(), hasMemoryFields });
     let degraded = false;
 
     for (const step of plan) {
+      if (step === "direct-vcf") {
+        // iOS Safari 導航到同網域 .vcf 會直接顯示聯絡人卡片，比分享選單少一步。
+        // 導航後本頁即被聯絡人預覽接管，後續步驟不會執行——這是預期行為。
+        location.assign(STATIC_VCARD);
+        return;
+      }
+
       if (step === "share") {
         try {
           await navigator.share({ files: [file], title: t.shareTitle });

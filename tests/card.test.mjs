@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { deliveryPlan } from "../card/save-strategy.js";
 import { buildVCard } from "../card/vcard.js";
 import { card } from "../card/config.js";
+import { readFileSync } from "node:fs";
 
 const DEVICES = [
   { name: "Android Chrome（可分享）",   canShareFiles: true,  isIOS: false },
@@ -59,6 +60,38 @@ test("桌面瀏覽器直接走下載", () => {
   assert.deepEqual(
     deliveryPlan({ canShareFiles: false, isIOS: false }),
     ["download", "manual-link"],
+  );
+});
+
+test("iOS 未填相識資訊時走靜態 .vcf，可直接跳出聯絡人卡片（2026-09-14 雙平台實測）", () => {
+  assert.deepEqual(
+    deliveryPlan({ canShareFiles: true, isIOS: true, hasMemoryFields: false }),
+    ["direct-vcf", "share", "ios-in-app-guidance", "manual-link"],
+  );
+});
+
+test("填了相識資訊就不得走靜態 .vcf——那個檔帶不動時間／場合／GPS", () => {
+  for (const d of DEVICES) {
+    const plan = deliveryPlan({ ...d, hasMemoryFields: true });
+    assert.ok(!plan.includes("direct-vcf"), `${d.name}：有填資料卻走了靜態檔，內容會遺失`);
+  }
+});
+
+test("Android 不得走靜態 .vcf——實測一律變成下載，沒有直接開啟聯絡人的路", () => {
+  for (const d of DEVICES.filter((x) => !x.isIOS)) {
+    for (const mem of [true, false]) {
+      assert.ok(
+        !deliveryPlan({ ...d, hasMemoryFields: mem }).includes("direct-vcf"),
+        `${d.name} 出現了 direct-vcf`,
+      );
+    }
+  }
+});
+
+test("iOS App 內建瀏覽器不得走靜態 .vcf——它連導航都會失敗且毫無回饋", () => {
+  assert.ok(
+    !deliveryPlan({ canShareFiles: false, isIOS: true, hasMemoryFields: false })
+      .includes("direct-vcf"),
   );
 });
 
@@ -134,6 +167,24 @@ test("拒絕定位仍能產生完整 vCard", () => {
   const v = buildVCard({ language: "ja", timestamp: AT, latitude: null, longitude: null });
   assert.ok(v.includes("BEGIN:VCARD") && v.includes("END:VCARD"));
   assert.ok(!v.includes("Google Maps"));
+});
+
+test("靜態 Lucas-Lu.vcf 與 config.js 同步（改了聯絡資料卻忘記重新產生會被擋下）", () => {
+  const committed = readFileSync(new URL("../card/Lucas-Lu.vcf", import.meta.url), "utf8");
+  const expected = buildVCard({
+    language: "zh",
+    timestamp: new Date("2026-09-14T00:00:00.000Z"),
+    includeMemory: false,
+  });
+  // REV 是產生當下的時戳，重新產生必然不同，比對時略過
+  const stripRev = (v) => v.split("\r\n").filter((l) => !l.startsWith("REV:")).join("\r\n");
+  assert.equal(stripRev(committed), stripRev(expected),
+    "card/Lucas-Lu.vcf 已過期。請重新產生：見 card/README.md");
+});
+
+test("靜態 .vcf 不含相識紀錄欄位", () => {
+  const committed = readFileSync(new URL("../card/Lucas-Lu.vcf", import.meta.url), "utf8");
+  assert.ok(!committed.includes("NOTE"), "靜態檔不該有 NOTE——它塞不進即時資訊");
 });
 
 /* ── 內容設定的結構完整性 ── */
