@@ -290,14 +290,26 @@ test("翻卡一次只有一面在排版中（2026-09-22 真機 regression）", (
   assert.ok(/id="paper-front"/.test(visible[0]), "預設露出的應是中文正面");
 });
 
-test("翻卡不得回頭用 3D：preserve-3d 在 <button> 裡真機會壞", () => {
-  // 這不是在鎖寫法，是擋一個已經在真機上壞過一次的具體技術。
+test("版面不得交給 3D 決定：preserve-3d 與絕對定位堆疊在真機上壞過一次", () => {
+  // 擋的是「讓 3D 決定兩面會不會分開」這件事，不是擋動畫。
+  // rotateY 作用在當下唯一在排版中的那一面，壞掉只是沒動畫，版面不受影響。
   const css = readCard("styles.css");
-  // 剝掉註解——說明為什麼不用 3D 的那段文字本身會提到這些關鍵字
+  // 剝掉註解——說明為什麼不這樣做的那段文字本身會提到這些關鍵字
   const paperCss = css.slice(css.indexOf("/* 紙本名片翻卡")).replace(/\/\*[\s\S]*?\*\//g, "");
-  for (const banned of ["preserve-3d", "backface-visibility", "rotateY"]) {
+  for (const banned of ["preserve-3d", "backface-visibility"]) {
     assert.ok(!paperCss.includes(banned), `紙本名片樣式又出現 ${banned}`);
   }
+  assert.ok(!/position:\s*absolute/.test(paperCss),
+    "名片面又被絕對定位——兩面就可能同時佔版面");
+});
+
+test("翻面動畫有退路：不支援或使用者要求減少動態時直接切換", () => {
+  const app = readCard("app.js");
+  assert.ok(app.includes("prefers-reduced-motion"), "沒有尊重 prefers-reduced-motion");
+  // 動畫路徑之外必須存在「直接設定並 render」的分支
+  const fn = app.slice(app.indexOf("function setPaperFace"), app.indexOf("HALF_TURN_MS);"));
+  const direct = fn.split("paperBack = next; render(); return;").length - 1;
+  assert.ok(direct >= 2, `直接切換的退路只有 ${direct} 條，動畫失效時會卡住`);
 });
 
 test("名片圖用 height:auto，不會被壓扁變形", () => {

@@ -190,12 +190,16 @@ button:disabled { cursor: wait; opacity: .6; }
 .save-result-action:active { transform: translateY(1px); }
 
 /* 紙本名片翻卡。
-   初版用 transform-style: preserve-3d 的 3D 翻面，在 <button> 裡不可靠——
-   真機上兩面都落回普通排版、疊成一長條。名片頁會被各種不知名手機瀏覽器開啟，
-   所以改成「一次只有一面在排版中」：另一面掛 hidden，完全不參與版面。
-   沒有絕對定位、沒有 3D、沒有 aspect-ratio 依賴，排版壞不了。 */
+   初版用 transform-style: preserve-3d 把兩面絕對定位互疊，真機上 3D 沒生效時
+   兩面都落回普通排版、疊成一長條變形。現在「一次只有一面在排版中」：
+   另一面掛 hidden，完全不參與版面。沒有絕對定位、沒有 3D 堆疊。
+
+   翻面動畫是疊在這個結構「之上」的裝飾：目前這面轉到 90 度，中點換面，
+   新的一面從 -90 度轉回 0。全程仍然只有一面在排版中，且只用單一元素的
+   rotateY。關鍵是失敗模式——動畫或 transform 不支援時只是變成直接切換，
+   排版不受影響。 */
 .paper-card { padding: 28px 24px 0; }
-.paper-stage { margin-top: 16px; }
+.paper-stage { margin-top: 16px; perspective: 1200px; }
 .paper-flip {
   display: block;
   width: 100%;
@@ -219,3 +223,22 @@ button:disabled { cursor: wait; opacity: .6; }
   box-shadow: 0 6px 18px rgba(16, 35, 61, .12);
 }
 .paper-hint { margin: 12px 0 0; color: var(--muted); font-size: 13px; text-align: center; }
+
+/* 翻面動畫：只作用在「當下唯一在排版中的那一面」。
+   靜止樣式完全不含 transform——轉進來那半段用 keyframe 而非「class 帶著
+   rotateY(-90deg)」，因為後者一旦過渡沒跑就會卡在 -90 度（實測踩過）。
+   動畫不支援或沒跑完，元素就是正常的 transform: none。 */
+.paper-face { transition: transform .2s cubic-bezier(.45, 0, .55, 1); }
+.paper-face.turn-out { transform: rotateY(90deg); }
+.paper-face.turn-in { animation: paper-turn-in .2s cubic-bezier(.45, 0, .55, 1); }
+
+@keyframes paper-turn-in {
+  from { transform: rotateY(-90deg); }
+  to   { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paper-face { transition: none; }
+  .paper-face.turn-out { transform: none; }
+  .paper-face.turn-in { animation: none; }
+}

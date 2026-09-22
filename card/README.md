@@ -89,6 +89,26 @@ writeFileSync('card/Lucas-Lu.vcf', buildVCard({
 
 檔案在 `config.js` 的 `assets.paperCard` 宣告，圖檔與 `line-qr.jpg` 同層。
 
+### 翻面動畫為什麼長這樣
+
+初版用 `transform-style: preserve-3d` 把兩面絕對定位互疊，靠 3D 讓背面轉到看不見。
+**真機上 3D 沒生效時，兩面都落回普通排版、疊成一長條變形**——版面被交給了
+一個不保證存在的 CSS 特性去決定。
+
+現在版面與動畫分開：
+
+- **版面**：一次只有一面在排版中，另一面掛 `hidden`。沒有絕對定位、沒有 3D 堆疊。
+- **動畫**：疊在上面的裝飾。目前這面 `rotateY` 到 90 度 → 中點換 `hidden` →
+  新的一面用 keyframe 從 -90 度轉回 0。只作用在當下唯一在排版中的那一面。
+
+關鍵是失敗模式：**動畫沒跑，結果只是直接切換，版面不受影響**。
+
+轉進來那半段刻意用 keyframe 而不是「class 帶著 `rotateY(-90deg)`」——後者的
+靜止樣式含 transform，過渡一旦沒跑就會卡在 -90 度（實測踩過）。keyframe 的
+靜止樣式是 `transform: none`，動畫不跑就是正常的一面。
+
+`prefers-reduced-motion: reduce` 時直接切換，不做動畫。
+
 ### 更新聯絡資料後也要重掃紙本名片
 
 名片圖是點陣檔，**不會跟著 `config.js` 變**——與靜態 `Lucas-Lu.vcf` 完全同一類問題。
