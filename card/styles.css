@@ -86,7 +86,9 @@ h1 span { display: block; margin-top: 7px; font-size: .55em; font-weight: 500; l
 .line-copy > p:not(.line-kicker) { margin: 8px 0 14px; color: var(--muted); font-size: 13px; line-height: 1.55; }
 .line-button { display: inline-block; padding: 11px 14px; color: white; border-radius: 11px; background: #06c755; text-decoration: none; font-size: 14px; font-weight: 800; box-shadow: 0 8px 18px rgba(6, 199, 85, .18); }
 .line-qr { display: block; padding: 6px; border-radius: 14px; background: white; box-shadow: 0 6px 18px rgba(16, 35, 61, .09); }
-.line-qr img { display: block; width: 100%; height: auto; border-radius: 9px; }
+/* 圖片本身不加圓角：QR 的角落是定位點，圓角會把它啃掉。
+   視覺上的圓角由外層白框 .line-qr 負責，只修到留白。 */
+.line-qr img { display: block; width: 100%; height: auto; }
 .memory { padding: 30px 24px 38px; }
 .section-heading { margin-bottom: 24px; }
 .step { margin: 0 0 7px; color: var(--blue); font-size: 12px; font-weight: 800; letter-spacing: .16em; }

@@ -120,6 +120,23 @@ writeFileSync('card/Lucas-Lu.vcf', buildVCard({
 WebP（quality 82）與 JPEG（quality 88）→ 覆蓋 `card/` 下的四個檔 →
 更新 `printed` → `npm test`。
 
+## 更換 LINE QR Code 時
+
+`line-qr.jpg` 本身要帶**至少 4 個模組的白色留白**（quiet zone），這是 QR 規範的要求。
+LINE App 匯出的圖通常只留約 1 個模組，直接拿來用會出事：
+
+- 顯示尺寸只有 100–130px，1 個模組換算後不到 4px
+- 任何加在圖片上的 `border-radius` 都會直接啃掉三個角的定位點（2026-09-22 就是這樣被切掉的）
+
+做法：量出模組大小（定位點的黑色方塊寬 = 7 模組），把圖案原樣貼到一張白底畫布上，
+四邊各留 4 個模組。**不要重新取樣圖案本身**，會讓模組邊緣糊掉。
+
+換完後：更新 `index.html` 裡 `<img src="line-qr.jpg">` 的 `width`/`height`（`npm test` 會擋），
+並確認解碼結果仍是正確的 LINE 網址。
+
+`.line-qr img` **不得加 `border-radius`**——視覺上的圓角由外層白框負責，只修到留白。
+測試會擋下重新加上去的情況。
+
 ## 已知限制：複姓
 
 `vcard.js` 以「中文姓名第一個字為姓」拆分 vCard 的 `N` 欄位。
