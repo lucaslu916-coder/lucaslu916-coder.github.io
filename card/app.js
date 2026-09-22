@@ -229,6 +229,45 @@ function render() {
 }
 
 /* ────────────────────────────────────────────────────────────
+   紙本名片翻面
+
+   動畫是疊在「一次只有一面在排版中」之上的裝飾，不是版面的一部分：
+   目前這面轉到 90 度 → 中點換面（render 改 hidden）→ 新的一面從 -90 度轉回 0。
+   任何一步沒生效，結果就只是直接切換，排版不會壞——上一版正是把版面
+   交給 3D 決定，才會在真機上疊成一長條。
+   ──────────────────────────────────────────────────────────── */
+const HALF_TURN_MS = 200;
+let turning = false;
+
+const prefersReducedMotion = () =>
+  window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+
+function setPaperFace(next) {
+  if (next === paperBack || turning) { paperBack = next; render(); return; }
+
+  const canAnimate =
+    !prefersReducedMotion() && typeof document.body.style.transform === "string";
+  if (!canAnimate) { paperBack = next; render(); return; }
+
+  const leaving = $(paperBack ? "paper-back" : "paper-front");
+  turning = true;
+  leaving.classList.add("turn-out");
+
+  setTimeout(() => {
+    leaving.classList.remove("turn-out");
+    paperBack = next;
+    render();                                  // 換 hidden：這裡才真的換面
+    const entering = $(paperBack ? "paper-back" : "paper-front");
+    entering.classList.remove("turn-in");
+    void entering.offsetWidth;                 // 重置動畫，讓連續翻面每次都重播
+    entering.classList.add("turn-in");         // keyframe：從 -90 度轉回 0
+    turning = false;
+    // 清掉 class 只是整理，不影響正確性——靜止樣式本來就沒有 transform
+    setTimeout(() => entering.classList.remove("turn-in"), HALF_TURN_MS + 60);
+  }, HALF_TURN_MS);
+}
+
+/* ────────────────────────────────────────────────────────────
    定位（一律由使用者主動授權；拒絕不影響儲存名片）
    ──────────────────────────────────────────────────────────── */
 function requestLocation() {
@@ -370,14 +409,14 @@ async function saveContact() {
 document.querySelectorAll("#lang-group button").forEach((b) => {
   b.addEventListener("click", () => {
     language = b.dataset.lang;
-    paperBack = defaultPaperFace(language);
     render();
+    setPaperFace(defaultPaperFace(language));
     setFootnote("default");
     $("manual-fallback").hidden = true;
     hideDownloadResult();
   });
 });
-$("paper-flip").addEventListener("click", () => { paperBack = !paperBack; render(); });
+$("paper-flip").addEventListener("click", () => { setPaperFace(!paperBack); });
 $("location-button").addEventListener("click", requestLocation);
 $("save-button").addEventListener("click", () => { void saveContact(); });
 render();
