@@ -35,7 +35,7 @@ const UI = {
     resultBody: "檔案已存到手機的「下載」資料夾。點下方按鈕開啟它，手機就會問你要不要加入聯絡人。",
     resultAction: "開啟檔案並加入聯絡人",
     shareTitle: "呂建興 Lucas Lu 聯絡人名片",
-    paperStep: "紙本名片", paperTitle: "這張名片的紙本",
+    paperStep: "紙本名片",
     paperFrontAlt: "呂建興 工業技術研究院 產業科技國際策略發展所 資深研究員，中文名片正面",
     paperBackAlt: "Lucas Lu, Senior Researcher, Industrial Technology Research Institute — English side of the card",
     paperShowingFront: "點一下翻面 · 目前顯示中文面",
@@ -71,7 +71,7 @@ const UI = {
     resultBody: "The file is in your Downloads folder. Open it below and your phone will offer to add the contact.",
     resultAction: "Open the file to add the contact",
     shareTitle: "Contact card for Lucas Lu",
-    paperStep: "PRINTED CARD", paperTitle: "The printed card",
+    paperStep: "PRINTED CARD",
     paperFrontAlt: "Chinese side of Lucas Lu's ITRI business card",
     paperBackAlt: "English side of Lucas Lu's ITRI business card",
     paperShowingFront: "Tap to flip · showing the Chinese side",
@@ -107,7 +107,7 @@ const UI = {
     resultBody: "ファイルは「ダウンロード」フォルダに保存されました。下のボタンから開くと、連絡先に追加するかどうかの確認画面が表示されます。",
     resultAction: "ファイルを開いて連絡先に追加",
     shareTitle: "Lucas Lu（呂建興）の連絡先カード",
-    paperStep: "紙の名刺", paperTitle: "この名刺の実物",
+    paperStep: "紙の名刺",
     paperFrontAlt: "Lucas Lu（呂建興）の ITRI 名刺・中国語面",
     paperBackAlt: "Lucas Lu（呂建興）の ITRI 名刺・英語面",
     paperShowingFront: "タップで裏返す · 中国語面を表示中",
@@ -211,7 +211,6 @@ function render() {
   $("save-result-action").textContent = t.resultAction;
 
   $("paper-step").textContent = t.paperStep;
-  $("paper-title").textContent = t.paperTitle;
   $("paper-front").querySelector("img").alt = t.paperFrontAlt;
   $("paper-back").querySelector("img").alt = t.paperBackAlt;
   // 一次只有一面在排版中：另一面掛 hidden，完全不參與版面。
