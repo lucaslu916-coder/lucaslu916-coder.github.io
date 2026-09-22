@@ -212,8 +212,11 @@ function render() {
 
   $("paper-step").textContent = t.paperStep;
   $("paper-title").textContent = t.paperTitle;
-  $("paper-img-front").alt = t.paperFrontAlt;
-  $("paper-img-back").alt = t.paperBackAlt;
+  $("paper-front").querySelector("img").alt = t.paperFrontAlt;
+  $("paper-back").querySelector("img").alt = t.paperBackAlt;
+  // 一次只有一面在排版中：另一面掛 hidden，完全不參與版面。
+  $("paper-front").hidden = paperBack;
+  $("paper-back").hidden = !paperBack;
   $("paper-flip").setAttribute("aria-pressed", String(paperBack));
   $("paper-flip").setAttribute("aria-label", paperBack ? t.paperFlipToFront : t.paperFlipToBack);
   $("paper-hint").textContent = paperBack ? t.paperShowingBack : t.paperShowingFront;

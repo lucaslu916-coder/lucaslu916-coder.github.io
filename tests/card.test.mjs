@@ -275,6 +275,34 @@ test("紙本名片的介面用語齊備中英日三語", () => {
 test("JS 失效時中文正面仍然看得到（不預設藏起來）", () => {
   const html = readCard("index.html");
   const section = html.split('class="paper-card"')[1].split("</section>")[0];
-  assert.ok(!/paper-front[^>]*\shidden/.test(section), "正面被預設隱藏了，JS 失效就什麼都看不到");
+  assert.ok(!/id="paper-front"[^>]*\shidden/.test(section), "正面被預設隱藏了，JS 失效就什麼都看不到");
   assert.ok(section.includes('aria-pressed="false"'), "翻卡初始狀態應為正面");
+});
+
+test("翻卡一次只有一面在排版中（2026-09-22 真機 regression）", () => {
+  // 初版用 transform-style: preserve-3d 把兩面疊在一起，真機上 3D 失效後
+  // 兩面都落回普通排版、疊成一長條。現在改成另一面掛 hidden，完全不參與版面。
+  const section = readCard("index.html").split('class="paper-card"')[1].split("</section>")[0];
+  const faces = section.match(/<picture[^>]*class="paper-face"[^>]*>/g) ?? [];
+  assert.equal(faces.length, 2, "應有正反兩面");
+  const visible = faces.filter((f) => !/\shidden/.test(f));
+  assert.equal(visible.length, 1, `同時有 ${visible.length} 面在排版中，會疊成一長條`);
+  assert.ok(/id="paper-front"/.test(visible[0]), "預設露出的應是中文正面");
+});
+
+test("翻卡不得回頭用 3D：preserve-3d 在 <button> 裡真機會壞", () => {
+  // 這不是在鎖寫法，是擋一個已經在真機上壞過一次的具體技術。
+  const css = readCard("styles.css");
+  // 剝掉註解——說明為什麼不用 3D 的那段文字本身會提到這些關鍵字
+  const paperCss = css.slice(css.indexOf("/* 紙本名片翻卡")).replace(/\/\*[\s\S]*?\*\//g, "");
+  for (const banned of ["preserve-3d", "backface-visibility", "rotateY"]) {
+    assert.ok(!paperCss.includes(banned), `紙本名片樣式又出現 ${banned}`);
+  }
+});
+
+test("名片圖用 height:auto，不會被壓扁變形", () => {
+  const css = readCard("styles.css");
+  const rule = css.slice(css.indexOf(".paper-face img"), css.indexOf(".paper-hint"));
+  assert.ok(/height:\s*auto/.test(rule), "沒有 height:auto，圖片可能被容器壓扁");
+  assert.ok(!/object-fit/.test(rule), "object-fit 會在容器比例不符時裁切名片內容");
 });
