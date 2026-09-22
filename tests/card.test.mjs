@@ -264,7 +264,7 @@ test("圖片標好尺寸，避免載入時版面跳動", () => {
 
 test("紙本名片的介面用語齊備中英日三語", () => {
   const app = readCard("app.js");
-  const keys = ["paperStep", "paperTitle", "paperFrontAlt", "paperBackAlt",
+  const keys = ["paperStep", "paperFrontAlt", "paperBackAlt",
                 "paperShowingFront", "paperShowingBack", "paperFlipToBack", "paperFlipToFront"];
   for (const key of keys) {
     const hits = app.split(`${key}:`).length - 1;
@@ -301,6 +301,20 @@ test("版面不得交給 3D 決定：preserve-3d 與絕對定位堆疊在真機�
   }
   assert.ok(!/position:\s*absolute/.test(paperCss),
     "名片面又被絕對定位——兩面就可能同時佔版面");
+});
+
+test("紙本名片區塊仍有可及名稱，且不重複同一句話", () => {
+  // 原本的 h2「這張名片的紙本」只是把眉標再講一次（英文版更是逐字重複
+  // PRINTED CARD / The printed card），拿掉後區塊名稱改由眉標承擔。
+  const html = readCard("index.html");
+  const section = html.split('class="paper-card"')[1].split("</section>")[0];
+  const labelledBy = /aria-labelledby="([^"]+)"/.exec(
+    html.slice(html.indexOf('<section class="paper-card"')),
+  )?.[1];
+  assert.ok(labelledBy, "區塊沒有 aria-labelledby，螢幕閱讀器讀不出名稱");
+  assert.ok(new RegExp(`id="${labelledBy}"`).test(section),
+    `aria-labelledby 指向 ${labelledBy}，但區塊內沒有這個 id`);
+  assert.ok(!/<h2/.test(section), "又出現了與眉標重複的標題");
 });
 
 test("翻面動畫有退路：不支援或使用者要求減少動態時直接切換", () => {
