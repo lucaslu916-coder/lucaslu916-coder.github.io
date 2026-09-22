@@ -35,6 +35,12 @@ const UI = {
     resultBody: "檔案已存到手機的「下載」資料夾。點下方按鈕開啟它，手機就會問你要不要加入聯絡人。",
     resultAction: "開啟檔案並加入聯絡人",
     shareTitle: "呂建興 Lucas Lu 聯絡人名片",
+    paperStep: "紙本名片", paperTitle: "這張名片的紙本",
+    paperFrontAlt: "呂建興 工業技術研究院 產業科技國際策略發展所 資深研究員，中文名片正面",
+    paperBackAlt: "Lucas Lu, Senior Researcher, Industrial Technology Research Institute — English side of the card",
+    paperShowingFront: "點一下翻面 · 目前顯示中文面",
+    paperShowingBack: "點一下翻面 · 目前顯示英文面",
+    paperFlipToBack: "翻面檢視英文面", paperFlipToFront: "翻面檢視中文面",
   },
   en: {
     htmlLang: "en", langAria: "Language",
@@ -65,6 +71,12 @@ const UI = {
     resultBody: "The file is in your Downloads folder. Open it below and your phone will offer to add the contact.",
     resultAction: "Open the file to add the contact",
     shareTitle: "Contact card for Lucas Lu",
+    paperStep: "PRINTED CARD", paperTitle: "The printed card",
+    paperFrontAlt: "Chinese side of Lucas Lu's ITRI business card",
+    paperBackAlt: "English side of Lucas Lu's ITRI business card",
+    paperShowingFront: "Tap to flip · showing the Chinese side",
+    paperShowingBack: "Tap to flip · showing the English side",
+    paperFlipToBack: "Flip to the English side", paperFlipToFront: "Flip to the Chinese side",
   },
   ja: {
     htmlLang: "ja", langAria: "言語切り替え",
@@ -95,6 +107,12 @@ const UI = {
     resultBody: "ファイルは「ダウンロード」フォルダに保存されました。下のボタンから開くと、連絡先に追加するかどうかの確認画面が表示されます。",
     resultAction: "ファイルを開いて連絡先に追加",
     shareTitle: "Lucas Lu（呂建興）の連絡先カード",
+    paperStep: "紙の名刺", paperTitle: "この名刺の実物",
+    paperFrontAlt: "Lucas Lu（呂建興）の ITRI 名刺・中国語面",
+    paperBackAlt: "Lucas Lu（呂建興）の ITRI 名刺・英語面",
+    paperShowingFront: "タップで裏返す · 中国語面を表示中",
+    paperShowingBack: "タップで裏返す · 英語面を表示中",
+    paperFlipToBack: "英語面を表示", paperFlipToFront: "中国語面を表示",
   },
 };
 
@@ -106,7 +124,12 @@ const isIOS = () =>
   /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
   (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
+// 紙本名片預設翻到與介面語言相符的那一面：中文介面看中文面，英文與日文介面看英文面。
+// 沒有日文名片，而英文面的羅馬字姓名與地址對日本訪客比中文面實用。
+const defaultPaperFace = (lang) => lang !== "zh";
+
 let language = "zh";
+let paperBack = defaultPaperFace("zh");
 let location_ = null;
 let locationState = "idle";
 let lastBlobUrl = null;
@@ -186,6 +209,14 @@ function render() {
   $("save-result-title").textContent = t.resultTitle;
   $("save-result-body").textContent = t.resultBody;
   $("save-result-action").textContent = t.resultAction;
+
+  $("paper-step").textContent = t.paperStep;
+  $("paper-title").textContent = t.paperTitle;
+  $("paper-img-front").alt = t.paperFrontAlt;
+  $("paper-img-back").alt = t.paperBackAlt;
+  $("paper-flip").setAttribute("aria-pressed", String(paperBack));
+  $("paper-flip").setAttribute("aria-label", paperBack ? t.paperFlipToFront : t.paperFlipToBack);
+  $("paper-hint").textContent = paperBack ? t.paperShowingBack : t.paperShowingFront;
 
   document.querySelectorAll("#lang-group button").forEach((b) => {
     const on = b.dataset.lang === language;
@@ -336,12 +367,14 @@ async function saveContact() {
 document.querySelectorAll("#lang-group button").forEach((b) => {
   b.addEventListener("click", () => {
     language = b.dataset.lang;
+    paperBack = defaultPaperFace(language);
     render();
     setFootnote("default");
     $("manual-fallback").hidden = true;
     hideDownloadResult();
   });
 });
+$("paper-flip").addEventListener("click", () => { paperBack = !paperBack; render(); });
 $("location-button").addEventListener("click", requestLocation);
 $("save-button").addEventListener("click", () => { void saveContact(); });
 render();

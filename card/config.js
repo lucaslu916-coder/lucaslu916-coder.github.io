@@ -61,6 +61,25 @@ export const card = {
     portrait: "lucas-lu.png",
     lineQr: "line-qr.jpg",
     socialPreview: "og.png",
+
+    // 紙本名片掃描圖。中文面為正面、英文面為背面；
+    // 日文介面沿用英文面——沒有日文名片，而英文面的羅馬字姓名與地址對日本訪客更實用。
+    paperCard: {
+      front: { webp: "card-front-zh.webp", jpg: "card-front-zh.jpg" },
+      back: { webp: "card-back-en.webp", jpg: "card-back-en.jpg" },
+      width: 1057,
+      height: 634,
+
+      // 圖上實際印著的資料。改了下方欄位卻沒重掃名片時，npm test 會比對這裡並擋下
+      // ——與靜態 Lucas-Lu.vcf 同一套防呆。圖是點陣檔，不會跟著 config.js 變。
+      printed: {
+        titleZh: "資深研究員",
+        titleEn: "Senior Researcher",
+        phone: "03 591 7718",
+        email: "LucasLu@itri.org.tw",
+        address: "中興路四段195號10館2樓208室",
+      },
+    },
   },
 
   // vCard 內的機構與地址固定用中文原文，不隨介面語言切換——
