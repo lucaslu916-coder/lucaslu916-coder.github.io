@@ -188,3 +188,30 @@ button:disabled { cursor: wait; opacity: .6; }
   box-shadow: 0 8px 18px rgba(6, 169, 68, .2);
 }
 .save-result-action:active { transform: translateY(1px); }
+
+/* 紙本名片翻卡。點一下翻面；語言切換時 app.js 會把它翻到對應語言那一面。 */
+.paper-card { padding: 28px 24px 0; }
+.paper-stage { perspective: 1400px; margin-top: 16px; }
+.paper-flip {
+  position: relative; display: block; width: 100%; padding: 0;
+  aspect-ratio: 1057 / 634; border: 0; border-radius: 12px; background: none;
+  cursor: pointer; transform-style: preserve-3d;
+  transition: transform .6s cubic-bezier(.4, .05, .2, 1);
+}
+.paper-flip[aria-pressed="true"] { transform: rotateY(180deg); }
+.paper-flip:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+.paper-face {
+  position: absolute; inset: 0; overflow: hidden;
+  border: 1px solid var(--line); border-radius: 12px; background: white;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  box-shadow: 0 6px 18px rgba(16, 35, 61, .12);
+}
+/* <picture> 預設是 inline，不撐開就會讓 img 以原始 1057px 寬溢出被裁掉 */
+.paper-face picture { display: block; width: 100%; height: 100%; }
+.paper-face img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.paper-back { transform: rotateY(180deg); }
+.paper-hint { margin: 12px 0 0; color: var(--muted); font-size: 13px; text-align: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  .paper-flip { transition: none; }
+}

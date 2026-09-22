@@ -13,6 +13,8 @@
 | `save-strategy.js` | 聯絡人交付的降級順序（見下） |
 | `app.js` | 語言切換、定位、儲存聯絡人；介面用語三語表也在這裡 |
 | `styles.css` | 自 v1.2.1 `app/globals.css` 移植，移除 Tailwind 依賴 |
+| `card-front-zh.*` | 紙本名片中文面（正面）。WebP 為主、JPEG 為後備 |
+| `card-back-en.*` | 紙本名片英文面（背面） |
 
 ## 改名片資料
 
@@ -78,6 +80,25 @@ writeFileSync('card/Lucas-Lu.vcf', buildVCard({
 ```
 
 忘記重新產生時 `npm test` 會失敗並提示——不會默默送出過期的聯絡資料。
+
+## 紙本名片翻卡
+
+頁面下半部放了紙本名片的掃描圖，可點一下翻面。**語言切換時會自動翻到對應面**：
+中文介面顯示中文面，英文與日文介面顯示英文面——沒有日文名片，而英文面的
+羅馬字姓名與地址對日本訪客比中文面實用。JS 失效時仍看得到中文正面，只是不能翻。
+
+檔案在 `config.js` 的 `assets.paperCard` 宣告，圖檔與 `line-qr.jpg` 同層。
+
+### 更新聯絡資料後也要重掃紙本名片
+
+名片圖是點陣檔，**不會跟著 `config.js` 變**——與靜態 `Lucas-Lu.vcf` 完全同一類問題。
+所以用同一套防呆：`config.js` 裡 `assets.paperCard.printed` 記著圖上實際印的資料，
+`npm test` 會比對它與 `person` 的對應欄位。改了職稱、電話、Email 或地址卻沒重掃名片，
+測試就會失敗並指出要更新哪裡。
+
+重新製作時：掃描正反面 → 裁到卡片實際邊界（掃描器會留灰邊）→ 匯出 1057×634 的
+WebP（quality 82）與 JPEG（quality 88）→ 覆蓋 `card/` 下的四個檔 →
+更新 `printed` → `npm test`。
 
 ## 已知限制：複姓
 

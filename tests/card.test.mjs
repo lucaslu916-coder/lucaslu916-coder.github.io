@@ -223,3 +223,58 @@ test("日文不得把半導體機台誤譯為「設備」（日文的設備指�
   assert.ok(!jaText.includes("設備"), "日文內容出現「設備」，半導體機台應作「装置」");
   assert.ok(jaText.includes("装置"), "日文內容應使用「装置」");
 });
+
+/* ── 紙本名片翻卡 ── */
+
+const paper = card.assets.paperCard;
+const readCard = (f) => readFileSync(new URL(`../card/${f}`, import.meta.url), "utf8");
+
+test("紙本名片的四個圖檔都在 repo 裡（兩面 × WebP＋JPEG 後備）", () => {
+  for (const face of [paper.front, paper.back]) {
+    for (const file of [face.webp, face.jpg]) {
+      const bytes = readFileSync(new URL(`../card/${file}`, import.meta.url)).length;
+      assert.ok(bytes > 1000, `card/${file} 不存在或過小`);
+    }
+  }
+});
+
+test("圖上印的資料與 config.js 同步（改了聯絡資訊卻忘記重掃名片會被擋下）", () => {
+  // 名片圖是點陣檔，不會跟著 config.js 變——與靜態 Lucas-Lu.vcf 同一類問題，
+  // 所以用同一套防呆：config 改了、printed 沒跟著改，這裡就失敗。
+  const hint = "紙本名片圖已過期。請重掃名片並更新 card/config.js 的 assets.paperCard.printed";
+  assert.equal(paper.printed.titleZh, card.person.title.zh, hint);
+  assert.equal(paper.printed.titleEn, card.person.title.en, hint);
+  assert.equal(paper.printed.phone, card.person.phone.display, hint);
+  assert.equal(paper.printed.email, card.person.email, hint);
+  assert.equal(paper.printed.address, card.vcard.address[2], hint);
+});
+
+test("index.html 引用的檔名與 config.js 宣告的一致", () => {
+  const html = readCard("index.html");
+  for (const file of [paper.front.webp, paper.front.jpg, paper.back.webp, paper.back.jpg]) {
+    assert.ok(html.includes(file), `index.html 沒有引用 ${file}`);
+  }
+});
+
+test("圖片標好尺寸，避免載入時版面跳動", () => {
+  const html = readCard("index.html");
+  assert.ok(html.includes(`width="${paper.width}" height="${paper.height}"`),
+    "紙本名片的 <img> 缺少與 config 一致的 width/height");
+});
+
+test("紙本名片的介面用語齊備中英日三語", () => {
+  const app = readCard("app.js");
+  const keys = ["paperStep", "paperTitle", "paperFrontAlt", "paperBackAlt",
+                "paperShowingFront", "paperShowingBack", "paperFlipToBack", "paperFlipToFront"];
+  for (const key of keys) {
+    const hits = app.split(`${key}:`).length - 1;
+    assert.equal(hits, 3, `${key} 應在 zh／en／ja 各出現一次，實際 ${hits} 次`);
+  }
+});
+
+test("JS 失效時中文正面仍然看得到（不預設藏起來）", () => {
+  const html = readCard("index.html");
+  const section = html.split('class="paper-card"')[1].split("</section>")[0];
+  assert.ok(!/paper-front[^>]*\shidden/.test(section), "正面被預設隱藏了，JS 失效就什麼都看不到");
+  assert.ok(section.includes('aria-pressed="false"'), "翻卡初始狀態應為正面");
+});

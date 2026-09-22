@@ -77,6 +77,30 @@
     </a>
   </section>
 
+  <!-- 紙本名片：選配的身分確認。放在行動按鈕之後，不與「儲存聯絡人」搶第一屏。
+       JS 失效時仍看得到中文正面，只是不能翻面。 -->
+  <section class="paper-card" aria-labelledby="paper-title">
+    <p class="step" id="paper-step">紙本名片</p>
+    <h2 id="paper-title">這張名片的紙本</h2>
+    <div class="paper-stage">
+      <button type="button" class="paper-flip" id="paper-flip" aria-pressed="false" aria-label="翻面檢視英文面">
+        <span class="paper-face paper-front">
+          <picture>
+            <source srcset="card-front-zh.webp" type="image/webp">
+            <img id="paper-img-front" src="card-front-zh.jpg" alt="呂建興 工業技術研究院 產業科技國際策略發展所 資深研究員，中文名片正面" width="1057" height="634" loading="lazy" decoding="async">
+          </picture>
+        </span>
+        <span class="paper-face paper-back">
+          <picture>
+            <source srcset="card-back-en.webp" type="image/webp">
+            <img id="paper-img-back" src="card-back-en.jpg" alt="Lucas Lu, Senior Researcher, Industrial Technology Research Institute — English side of the card" width="1057" height="634" loading="lazy" decoding="async">
+          </picture>
+        </span>
+      </button>
+    </div>
+    <p class="paper-hint" id="paper-hint">點一下翻面 · 目前顯示中文面</p>
+  </section>
+
   <section class="memory" aria-labelledby="memory-title">
     <div class="section-heading">
       <p class="step" id="save-step">儲存名片</p>
