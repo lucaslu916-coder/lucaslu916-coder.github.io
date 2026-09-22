@@ -332,3 +332,40 @@ test("名片圖用 height:auto，不會被壓扁變形", () => {
   assert.ok(/height:\s*auto/.test(rule), "沒有 height:auto，圖片可能被容器壓扁");
   assert.ok(!/object-fit/.test(rule), "object-fit 會在容器比例不符時裁切名片內容");
 });
+
+/* ── LINE QR Code ── */
+
+// 純 node 讀 JPEG 尺寸：掃到 SOF 標記後取出高寬
+function jpegSize(buf) {
+  let i = 2; // 跳過 SOI
+  while (i < buf.length) {
+    if (buf[i] !== 0xff) { i += 1; continue; }
+    const marker = buf[i + 1];
+    if (marker >= 0xc0 && marker <= 0xcf &&
+        ![0xc4, 0xc8, 0xcc].includes(marker)) {
+      return { height: buf.readUInt16BE(i + 5), width: buf.readUInt16BE(i + 7) };
+    }
+    i += 2 + buf.readUInt16BE(i + 2);
+  }
+  throw new Error("找不到 JPEG 的 SOF 標記");
+}
+
+test("QR 圖片不得加圓角——角落是定位點，圓角會把它啃掉", () => {
+  // 2026-09-22：`.line-qr img` 原本有 border-radius: 9px，而這張 QR 的留白
+  // 只有約 1 模組，換算到顯示尺寸僅 3.9px，9px 的圓角直接切進三個角的定位點。
+  const css = readCard("styles.css");
+  const rule = css.slice(css.indexOf(".line-qr img"), css.indexOf(".memory"));
+  assert.ok(!/border-radius/.test(rule),
+    "QR 圖片又被加上 border-radius，角落定位點會被切掉");
+});
+
+test("index.html 宣告的 QR 尺寸與實際檔案相符", () => {
+  const { width, height } = jpegSize(
+    readFileSync(new URL("../card/line-qr.jpg", import.meta.url)),
+  );
+  const html = readCard("index.html");
+  const tag = /<img src="line-qr\.jpg"[^>]*>/.exec(html)?.[0] ?? "";
+  assert.ok(tag.includes(`width="${width}"`) && tag.includes(`height="${height}"`),
+    `QR 實際為 ${width}×${height}，但 index.html 宣告的不是——換圖後忘了改尺寸會造成版面跳動`);
+  assert.equal(width, height, "QR 應為正方形");
+});
