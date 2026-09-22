@@ -84,18 +84,14 @@
     <h2 id="paper-title">這張名片的紙本</h2>
     <div class="paper-stage">
       <button type="button" class="paper-flip" id="paper-flip" aria-pressed="false" aria-label="翻面檢視英文面">
-        <span class="paper-face paper-front">
-          <picture>
-            <source srcset="card-front-zh.webp" type="image/webp">
-            <img id="paper-img-front" src="card-front-zh.jpg" alt="呂建興 工業技術研究院 產業科技國際策略發展所 資深研究員，中文名片正面" width="1057" height="634" loading="lazy" decoding="async">
-          </picture>
-        </span>
-        <span class="paper-face paper-back">
-          <picture>
-            <source srcset="card-back-en.webp" type="image/webp">
-            <img id="paper-img-back" src="card-back-en.jpg" alt="Lucas Lu, Senior Researcher, Industrial Technology Research Institute — English side of the card" width="1057" height="634" loading="lazy" decoding="async">
-          </picture>
-        </span>
+        <picture class="paper-face" id="paper-front">
+          <source srcset="card-front-zh.webp" type="image/webp">
+          <img src="card-front-zh.jpg" alt="呂建興 工業技術研究院 產業科技國際策略發展所 資深研究員，中文名片正面" width="1057" height="634" loading="lazy" decoding="async">
+        </picture>
+        <picture class="paper-face" id="paper-back" hidden>
+          <source srcset="card-back-en.webp" type="image/webp">
+          <img src="card-back-en.jpg" alt="Lucas Lu, Senior Researcher, Industrial Technology Research Institute — English side of the card" width="1057" height="634" loading="lazy" decoding="async">
+        </picture>
       </button>
     </div>
     <p class="paper-hint" id="paper-hint">點一下翻面 · 目前顯示中文面</p>
