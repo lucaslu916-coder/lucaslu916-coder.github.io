@@ -369,3 +369,36 @@ test("index.html 宣告的 QR 尺寸與實際檔案相符", () => {
     `QR 實際為 ${width}×${height}，但 index.html 宣告的不是——換圖後忘了改尺寸會造成版面跳動`);
   assert.equal(width, height, "QR 應為正方形");
 });
+
+/* ── 永久入口轉址層 ──
+   這一層的全部價值在於「四處目標網址一致」。少改一處，就會有一部分訪客
+   被送到舊站台——而且是靜默的，沒有任何錯誤訊息。之前只靠人工記得。 */
+
+const entry = () => readFileSync(new URL("../index.html", import.meta.url), "utf8");
+
+test("入口頁的四處目標網址完全一致（少改一處會把部分訪客送到舊站）", () => {
+  const html = entry();
+  const found = {
+    canonical: html.match(/<link rel="canonical" href="([^"]+)">/)?.[1],
+    refresh: html.match(/http-equiv="refresh" content="0; url=([^"]+)">/)?.[1],
+    button: html.match(/<a class="btn" id="go" href="([^"]+)">/)?.[1],
+    target: html.match(/var TARGET = "([^"]+)";/)?.[1],
+  };
+  for (const [k, v] of Object.entries(found)) assert.ok(v, `找不到 ${k} 的目標網址`);
+  assert.equal(new Set(Object.values(found)).size, 1,
+    `四處不一致：${JSON.stringify(found, null, 2)}`);
+});
+
+test("入口頁本身的網址不可出現在目標裡（會變成轉址到自己，無限循環）", () => {
+  const target = entry().match(/var TARGET = "([^"]+)";/)[1];
+  assert.notEqual(target, "https://lucaslu916-coder.github.io/");
+  assert.ok(target.startsWith("https://"), "目標網址必須是完整的 https 網址");
+  assert.ok(target.endsWith("/"), "目標網址要以斜線結尾，查詢字串才接得乾淨");
+});
+
+test("轉址三重保險都還在：meta refresh、location.replace、手動按鈕", () => {
+  const html = entry();
+  assert.match(html, /http-equiv="refresh"/, "JS 失效時的退路");
+  assert.match(html, /location\.replace\(/, "不留歷史紀錄，按上一頁不會被彈回");
+  assert.match(html, /id="go"/, "前兩者被擋時的手動退路");
+});
